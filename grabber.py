@@ -4,8 +4,6 @@ import os # path manipulation
 import urllib.request as urllib
 import requests
 
-status = 'not done yet'
-
 # directory where all images will be downloaded
 image_folder = './images/'
 
@@ -23,8 +21,8 @@ def grabber(tag_argv, page_num):
 	streams = r.json()
 	# check if all pages have been visited
 	if len(streams) == 0:
-		global status
-		status = 'done'
+		global end_reached
+		end_reached = True
 	else:
 		# check if directory already exists
 		tag_folder = image_folder+tag_argv
@@ -45,9 +43,13 @@ def grabber(tag_argv, page_num):
 			counter = counter + 1
 			print("Finished image " + str(counter) + "/" + str(num_images))
 
+# ==========
+
+end_reached = False
+
 # inputs
-page_num = int(input('Enter the number of pages you want to download. To download all, simply enter a super large number:'))
-taginput = input('Enter tags,separated by space:')
+page_num = int(input('Enter the number of pages you want to download (to download all, simply enter a super large number):'))
+tag_input = input('Enter tags, separated by one space (for tags with more than one words, add an underscore):')
 # page_num = 100
 # taginput = "tansho" 
 
@@ -58,8 +60,8 @@ if not os.path.exists(image_folder):
 
 # download
 n = 1
-while n <= page_num and status == 'not done yet':
-  tagList = taginput.split(' ')
+while n <= page_num and not end_reached:
+  tagList = tag_input.split(' ')
   tag_argv = generate_tag_argv(tagList)
   grabber(tag_argv,n)
   n = n + 1
