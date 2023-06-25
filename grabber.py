@@ -7,7 +7,7 @@ import requests
 status = 'not done yet'
 
 # directory where all images will be downloaded
-danbooru_folder = './images/'
+image_folder = './images/'
 
 # generate tag argument to be used in url and folder creation
 def generate_tag_argv(tagList):
@@ -15,7 +15,6 @@ def generate_tag_argv(tagList):
 	for tag in tagList:
 		tag_argv = tag_argv + tag + '+'
 	tag_argv = tag_argv[:-1]
-	print("[0.2] tag string: %s" % tag_argv);
 	return tag_argv
 
 # request json, get urls of pictures and download them
@@ -23,39 +22,39 @@ def grabber(tag_argv, page_num):
 	r = requests.get('https://danbooru.donmai.us/posts.json?tags='+tag_argv+'&page='+str(page_num))
 	streams = r.json()
 	# check if all pages have been visited
-	print("[1] preparing to grab...")
 	if len(streams) == 0:
-		print("[2.1] All pictures have been downloaded!")
 		global status
 		status = 'done'
 	else:
 		# check if directory already exists
-		print("[2.2] checking for directory...")
-		if not os.path.exists(danbooru_folder+tag_argv):
-			print("[2.2.1] creating directory...")
-			os.mkdir(danbooru_folder+tag_argv)
+		tag_folder = image_folder+tag_argv
+		if not os.path.exists(tag_folder):
+			print("Making new tag folder at: %s" % tag_folder)
+			os.mkdir(tag_folder)
 
 		url = []
 		for post in streams:
 			if 'file_url' in post:
 				url.append(post['file_url'])
-		target = ['https://danbooru.donmai.us'+x for x in url]
-
+		
+		num_images = len(url)
+		counter = 0;
 		# download
-		for address in target:
-			urllib.urlretrieve(address,danbooru_folder+tag_argv+'/'+address.split('/')[-1])
+		for address in url:
+			urllib.urlretrieve(address,image_folder+tag_argv+'/'+address.split('/')[-1])
+			counter = counter + 1
+			print("Finished image " + str(counter) + "/" + str(num_images))
 
 # inputs
-# page_num = int(input('Enter the number of pages you want to download. To download all, simply enter a super large number:'))
-# taginput = input('Enter tags,separated by space:')
-page_num = 100
-taginput = "tansho" 
+page_num = int(input('Enter the number of pages you want to download. To download all, simply enter a super large number:'))
+taginput = input('Enter tags,separated by space:')
+# page_num = 100
+# taginput = "tansho" 
 
 # create images directory if not already created
-image_folder = "./images/"
 if not os.path.exists(image_folder):
-		print("[0.1] creating image directory...")
-		os.mkdir(image_folder)
+	print("Making new image folder at: %s" % image_folder)
+	os.mkdir(image_folder)
 
 # download
 n = 1
