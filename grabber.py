@@ -3,6 +3,7 @@
 import os # path manipulation
 import urllib.request as urllib
 import requests
+import sys
 
 # directory where all images will be downloaded
 image_folder = './images/'
@@ -23,46 +24,59 @@ def grabber(tag_argv, page_num):
 	if len(streams) == 0:
 		global end_reached
 		end_reached = True
+		print("No images on this page.")
 	else:
-		# check if directory already exists
-		tag_folder = image_folder+tag_argv
-		if not os.path.exists(tag_folder):
-			print("Making new tag folder at: %s" % tag_folder)
-			os.mkdir(tag_folder)
-
 		url = []
 		for post in streams:
 			if 'file_url' in post:
 				url.append(post['file_url'])
 		
+		# setup progress bar
 		num_images = len(url)
-		counter = 0;
-		# download
+		counter = 0
+		progress_bar(counter, num_images, num_images)
+
+		# download and update progress bar
 		for address in url:
 			urllib.urlretrieve(address,image_folder+tag_argv+'/'+address.split('/')[-1])
 			counter = counter + 1
-			print("Finished image " + str(counter) + "/" + str(num_images))
+			progress_bar(counter, num_images, num_images)
+
+def progress_bar(current, total, bar_length):
+    bar = "■" * current + "▢" * (bar_length - current)
+    print("Progress: %s %d/%d" % (bar, current, total), end="\r")
+		
 
 # ==========
 
 end_reached = False
 
-# inputs
-page_num = int(input('Enter the number of pages you want to download (to download all, simply enter a super large number):'))
-tag_input = input('Enter tags, separated by one space (for tags with more than one words, add an underscore):')
-# page_num = 100
-# taginput = "tansho" 
-
 # create images directory if not already created
 if not os.path.exists(image_folder):
 	print("Making new image folder at: %s" % image_folder)
+	print("This folder will be used to store all images. You may change this by editing variable \"image_folder\" inside grabber.py.\n")
 	os.mkdir(image_folder)
+
+# create tag directory if not already created
+tag_input = input('Enter tags, separated by one space (for tags with more than one words, add an underscore): ')
+tag_list = tag_input.split(' ')
+if len(tag_list) > 2:
+	print("Too many tags provided. Maximum of 2. Try again.")
+	sys.exit()
+tag_argv = generate_tag_argv(tag_list)
+tag_folder = image_folder+tag_argv
+if not os.path.exists(tag_folder):
+	print("Making new tag folder at: %s \n" % tag_folder)
+	os.mkdir(tag_folder)
+
+# number of pages
+page_num = int(input('Enter the number of pages you want to download (to download all, simply enter a super large number): '))
 
 # download
 n = 1
 while n <= page_num and not end_reached:
-  tagList = tag_input.split(' ')
-  tag_argv = generate_tag_argv(tagList)
+  print("\nNow downloading page %d." % n)
   grabber(tag_argv,n)
   n = n + 1
-print('Download successful!')
+
+print('\nDownload successful!')
