@@ -1,19 +1,20 @@
-# Danbooru-grabber
+# Danbooru Image Grabber
+
+This is an updated Python 3 fork of the [original repo made by uncountablecat](https://github.com/uncountablecat/danbooru-grabber). It downloads files (images *and* videos) from [Danbooru](http://danbooru.donmai.us/).
+
+*WARNING: You may end up downloading pictures that are NSFW depending on the tags you use. So use it wisely.*
+
+## Usage
+
+On your terminal, simply go to the directory where you have installed this script. Then, run `python3 grabber.py`. The program will then prompt you to:
+1. provide the number of pages of files you want to download, and
+2. provide the tags corresponding to the files you want to download.
+The program will then mass-download pictures up to the page nunmber you specify. If you wish to terminate the program early, run `Ctrl-C` on Windows and `Command-.` on Mac.
+
+By default, the program will create a new folder at this directory, called `images`, if it has not already been created. You may customize this within `grabber.py`; the corresponding variable to change is `image_folder`. After that, the program will create another folder, within `images`, that is named after the tags you provide.
 
 _Upcoming update_: As some users pointed out, Danbooru limits the number of tags up to 2. 
 
-_Update 2015/12/07_: Now, you can download all the pictures with certain tags. Simply type in a very large number like 1000. It will automatically stop when all pictures are downloaded. Also you will be able to download more than 100 pictures at once now.
-
-**__Currently you would have to open the `grabber.py` and use text editor to change line 10 before using__**
-#### About
-This is a simple Python script that downloads pictures from [Danbooru](http://danbooru.donmai.us/). It downloads 50 pictures with tags pre-specified by users and saves the pictures to the folder named after the tags users input. **WARNING: You may end up downloading pictures that are NSFW depending on the tags you use. So use it wisely.**
-
-#### Prerequisites
-- First you need to [have Python installed](https://www.python.org/downloads/). This script is written in Python 2.7.10. It hasn't been tested under Python 3 yet.
-- You will also need a Python modules called [requests](http://docs.python-requests.org/en/latest/). 
-
-#### How do I run this thing (on Mac)?
-- Open the terminal. 
-- Navigate to the folder where you downloaded this script. For example, if you downloaded this script to `/Users/Nico`, then you can type in `cd /Users/Nico` and it will take you there.
-- Type in `python grabber.py` and follow the instruction.
-- Enjoy!
+## Prerequisites
+- You need to [have Python 3 installed](https://www.python.org/downloads/).
+- You will also need a Python module called [requests](http://docs.python-requests.org/en/latest/). If you have already installed PIP, simply run `pip install requests`.
