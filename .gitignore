@@ -1,9 +1,6 @@
-# image files
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.tif
+# arbitrary image folder (by default, image/)
+*/
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
