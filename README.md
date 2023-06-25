@@ -1,6 +1,6 @@
 # Danbooru Image Grabber
 
-This is an updated Python 3 fork of the [original repo made by uncountablecat](https://github.com/uncountablecat/danbooru-grabber). It downloads files (images *and* videos) from [Danbooru](http://danbooru.donmai.us/).
+This is an updated Python 3 fork of the [original repo made by uncountablecat](https://github.com/uncountablecat/danbooru-grabber). It downloads files (images *and* videos) from [Danbooru](https://danbooru.donmai.us/).
 
 *WARNING: You may end up downloading pictures that are NSFW depending on the tags you use. So use it wisely.*
 
