@@ -58,7 +58,10 @@ if not os.path.exists(image_folder):
 	os.mkdir(image_folder)
 
 # create tag directory if not already created
-tag_input = input('Enter tags, separated by one space (for tags with more than one words, add an underscore): ')
+tag_input = input('Enter tags, separated by one space (for tags with more than one word, add an underscore): ')
+if (len(tag_input) == 0):
+	print("No tag provided. Try again.")
+	sys.exit()
 tag_list = tag_input.split(' ')
 if len(tag_list) > 2:
 	print("Too many tags provided. Maximum of 2. Try again.")
@@ -70,7 +73,12 @@ if not os.path.exists(tag_folder):
 	os.mkdir(tag_folder)
 
 # number of pages
-page_num = int(input('Enter the number of pages you want to download (to download all, simply enter a super large number): '))
+page_num = input('Enter the number of pages you want to download (to download all, simply enter a super large number): ')
+if (len(page_num) == 0):
+	print("No number provided. Try again.")
+	sys.exit()
+else:
+	page_num = int(page_num)
 
 # download
 n = 1
