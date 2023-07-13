@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #coding:utf-8
 import os # path manipulation
-import urllib.request as urllib
+from urllib.request import urlopen
 import requests
 import sys
 
@@ -38,9 +38,16 @@ def grabber(tag_argv, page_num):
 
 		# download and update progress bar
 		for address in url:
-			urllib.urlretrieve(address,image_folder+tag_argv+'/'+address.split('/')[-1])
+			download(address)
+			#urlretrieve(address,tag_folder+'/'+address.split('/')[-1])
 			counter = counter + 1
 			progress_bar(counter, num_images, num_images)
+
+def download(address):
+	img = urlopen(address)
+	with open(tag_folder + "/" + address.split('/')[-1], "wb") as f:
+		info = img.read(1000000)
+		f.write(info)
 
 def progress_bar(current, total, bar_length):
     bar = "■" * current + "▢" * (bar_length - current)
