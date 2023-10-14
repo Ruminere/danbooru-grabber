@@ -17,9 +17,10 @@ def generate_tag_argv(tagList):
 	return tag_argv
 
 # request json, get urls of pictures and download them
-def grabber(tag_argv, page_num):
+def grabber(tag_argv, page_num, returns_sfw):
 	r = requests.get('https://danbooru.donmai.us/posts.json?tags='+tag_argv+'&page='+str(page_num))
 	streams = r.json()
+	
 	# check if all pages have been visited
 	if len(streams) == 0:
 		global end_reached
@@ -29,7 +30,8 @@ def grabber(tag_argv, page_num):
 		url = []
 		for post in streams:
 			if 'file_url' in post:
-				url.append(post['file_url'])
+				if (not returns_sfw) or (returns_sfw and ("rating" in post) and post["rating"] == "g"):
+					url.append(post['file_url'])
 		
 		# setup progress bar
 		num_images = len(url)
@@ -87,11 +89,21 @@ if (len(page_num) == 0):
 else:
 	page_num = int(page_num)
 
+# check before downlodaing questionable content
+returns_sfw = input("Return strictly safe content? [Y/N]: ")
+if returns_sfw == "Y" or returns_sfw == "y":
+	returns_sfw = True
+elif returns_sfw == "N" or returns_sfw == "n":
+	returns_sfw = False
+else:
+	print("Must respond with Y or N. Try again.")
+	sys.exit()
+
 # download
 n = 1
 while n <= page_num and not end_reached:
   print("\nNow downloading page %d." % n)
-  grabber(tag_argv,n)
+  grabber(tag_argv,n,returns_sfw)
   n = n + 1
 
 print('\nDownload successful!')
